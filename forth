@@ -37,7 +37,7 @@ evaluate () {
         tuck) pop a b; push "$a" "$b" "$a";;
         rot) pop a b c; push "$b" "$a" "$c";;
         over) pop a b; push "$b" "$a" "$b";;
-        #pick) pop a; 
+        pick) pop a; push "${stack[-a-1]}";;
         #roll) pop a; 
         =) pop a b; push "$((a == b))";;
         ['><'])  pop a b; push "$((b $1 a))";;
