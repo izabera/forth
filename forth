@@ -110,7 +110,7 @@ evaluate () {
             eval evaluate "${code[!a]}"
             ;;
         constant) shift; pop "constants[$1]";;
-        variable) shift; variable[$1]=0;;
+        variable) shift; variables[$1]=0;;
         !) pop name val; variables[$name]=$val;;
         @) pop name; push "${variables[$name]}";;
         \?) pop name; output "${variables[$name]}";;
