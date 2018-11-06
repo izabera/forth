@@ -38,7 +38,13 @@ evaluate () {
         rot) pop a b c; push "$b" "$a" "$c";;
         over) pop a b; push "$b" "$a" "$b";;
         pick) pop a; push "${stack[-a-1]}";;
-        #roll) pop a; 
+        roll) pop a
+              stack=(
+                     "${stack[@]::${#stack[@]}-1-a}"
+                     "${stack[@]: -a}"
+                     "${stack[-a-1]}"
+                     )
+                     ;;
         =) pop a b; push "$((a == b))";;
         ['><'])  pop a b; push "$((b $1 a))";;
         '(') while [[ $1 != ')' ]]; do shift; done ;;
