@@ -96,9 +96,9 @@ evaluate () {
   done
 }
 
-while read -e; do
-  history -s "$REPLY"
-  read -a input <<< "$REPLY"
+while read -re; do
+  history -s -- "$REPLY"
+  read -ra input <<< "$REPLY"
   echo -n $'\e[32m>\e[m '
   evaluate "${input[@]}"
   echo $'\e[32mok\e[m'
