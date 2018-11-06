@@ -12,13 +12,15 @@ push () { stack+=("$@"); }
 
 output () { echo -n "$* "; }
 
-declare -A funcs
+declare -A funcs variables constants
 
 evaluate () {
   local a b c
   while (( $# )); do
     if [[ -v funcs[$1] ]]; then
       eval evaluate "${funcs[$1]}"
+    elif [[ -v constants[$1] ]]; then
+      push "${constants[$1]:-0}"
     else
       case ${1,,} in
         '\') break;;
@@ -75,6 +77,18 @@ evaluate () {
               (( i += a < b ? 1 : -1 ))
             done
             ;;
+        \?do) local i=0 code=
+            shift
+            while [[ ${1,,} != loop ]]; do
+              code+="${1@Q} "
+              shift
+            done
+            pop a b
+            while (( a+i != b )); do
+              eval evaluate "$code"
+              (( i += a < b ? 1 : -1 ))
+            done
+            ;;
         i) push "$i" ;;
         begin) code=
                shift
@@ -95,6 +109,11 @@ evaluate () {
             pop a
             eval evaluate "${code[!a]}"
             ;;
+        constant) shift; pop "constants[$1]";;
+        variable) shift; variable[$1]=0;;
+        !) pop name val; variables[$name]=$val;;
+        @) pop name; push "${variables[$name]}";;
+        \?) pop name; output "${variables[$name]}";;
         *) push "$1";;
       esac
     fi
