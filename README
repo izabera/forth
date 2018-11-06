@@ -62,12 +62,12 @@ see square     \ : square dup * ; ok
 
 \ -------------------------------- Conditionals --------------------------------
 
-\ -1 == true, 0 == false. However, any non-zero value is usually treated as
+\ 1 == true, 0 == false. However, any non-zero value is usually treated as
 \ being true:
 42 42 =    \ -1 ok
 12 53 =    \ 0 ok
 
-\ `if` is a compile-only word. `if` <stuff to do> `then` <rest of program>.
+\ `if` <stuff to do> `then` <rest of program>.
 : ?>64 ( n -- n ) dup 64 > if ." Greater than 64! " then ; \ ok
 100 ?>64                                                  \ Greater than 64! ok
 
@@ -78,7 +78,6 @@ see square     \ : square dup * ; ok
 
 \ ------------------------------------ Loops -----------------------------------
 
-\ `do` is also a compile-only word.
 : myloop ( -- ) 5 0 do cr ." Hello! " loop ; \ ok
 myloop
 \ Hello!
@@ -92,3 +91,20 @@ myloop
 \ We can get the value of the index as we loop with `i`:
 : one-to-12 ( -- ) 12 0 do i . loop ;     \ ok
 one-to-12                                 \ 0 1 2 3 4 5 6 7 8 9 10 11 12 ok
+
+\ ---------------------------- Variables and Memory ----------------------------
+
+\ Use `variable` to declare `age` to be a variable.
+variable age    \ ok
+
+\ Then we write 21 to age with the word `!`.
+21 age !    \ ok
+
+\ Finally we can print our variable using the "read" word `@`, which adds the
+\ value to the stack, or use `?` that reads and prints it in one go.
+age @ .    \ 21 ok
+age ?      \ 21 ok
+
+\ Constants are quite similar, except we don't bother with memory addresses:
+100 constant WATER-BOILING-POINT    \ ok
+WATER-BOILING-POINT .               \ 100 ok

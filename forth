@@ -17,9 +17,9 @@ declare -A funcs variables constants
 evaluate () {
   local a b c
   while (( $# )); do
-    if [[ -v funcs[$1] ]]; then
+    if [[ -v "funcs[${1@Q}]" ]]; then
       eval evaluate "${funcs[$1]}"
-    elif [[ -v constants[$1] ]]; then
+    elif [[ -v "constants[${1@Q}]" ]]; then
       push "${constants[$1]:-0}"
     else
       case ${1,,} in
@@ -114,6 +114,7 @@ evaluate () {
         !) pop name val; variables[$name]=$val;;
         @) pop name; push "${variables[$name]}";;
         \?) pop name; output "${variables[$name]}";;
+        clearstack) stack=() ;;
         *) push "$1";;
       esac
     fi
